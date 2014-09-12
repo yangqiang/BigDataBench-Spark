@@ -10,19 +10,19 @@ import org.apache.spark.SparkConf
 object WordCount {
 
   def main(args: Array[String]): Unit = {
-    if (args.length < 3) {
-      System.err.println("Usage: WordCount <master> <data_file> <save_file>" +
+    if (args.length < 2) {
+      System.err.println("Usage: WordCount <data_file> <save_file>" +
         " [<slices>]")
       System.exit(1)
     }
 
-    val host = args(0)
-    var splits = 1
+    var splits = 2
     val conf = new SparkConf().setAppName("BigDataBench WordCount")
     val spark = new SparkContext(conf)
-    val filename = args(1)
-    val save_file = args(2)
-    if (args.length > 3) splits = args(3).toInt
+    val filename = args(0)
+    val save_file = args(1)
+    if (args.length > 2) splits = args(2).toInt
+
     val lines = spark.textFile(filename, splits)
     val words = lines.flatMap(line => line.split(" "))
     val words_map = words.map(word => (word, 1))

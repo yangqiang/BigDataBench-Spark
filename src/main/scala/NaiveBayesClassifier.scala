@@ -39,19 +39,18 @@ object NaiveBayesClassifier {
   }
 
   def main(args: Array[String]): Unit = {
-    if (args.length < 4) {
-      System.err.println("Usage: BayesClassifier <master> <data_file> " +
+    if (args.length < 3) {
+      System.err.println("Usage: BayesClassifier <data_file> " +
         "<model_file> <result_file> [<slices>]")
       System.exit(1)
     }
 
-    val host = args(0)
     val conf = new SparkConf().setAppName("BigDataBench NaiveBayesClassifier")
     val spark = new SparkContext(conf)
-    val data_fn = args(1)
-    val model_fn = args(2)
-    val save_path = args(3)
-    val slices = if (args.length > 4) args(3).toInt else 1
+    val data_fn = args(0)
+    val model_fn = args(1)
+    val save_path = args(2)
+    val slices = if (args.length > 3) args(3).toInt else 1
 
     println("Loading data, please wait...")
     val data = spark.textFile(data_fn, slices)

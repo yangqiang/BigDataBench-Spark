@@ -36,24 +36,22 @@ object NaiveBayesTrainer {
   }
 
   def main(args: Array[String]) {
-
-    if (args.length < 3) {
-      System.err.println("Usage: NaiveBayes <master> <data_file> " +
+    if (args.length < 2) {
+      System.err.println("Usage: NaiveBayes <data_file> " +
         "<save_file> [<slices>]")
       System.exit(1)
     }
 
-    val host = args(0)
     val conf = new SparkConf().setAppName("BigDataBench NaiveBayesTrainer")
     val spark = new SparkContext(conf)
-    val filename = args(1)
-    val save_path = args(2)
-    val slices = if (args.length > 3) args(3).toInt else 1
+    val filename = args(0)
+    val save_path = args(1)
+    val slices = if (args.length > 2) args(2).toInt else 1
     println("Loading data, please wait...")
     val lines = spark.textFile(filename, slices)
 
     // train every line and return a RDD of classifier
-    val models_rdd = lines.map { line => train(line) }
+    val models_rdd = lines.map { line => train(line)}
 
     // merge all classifier
     println("Reducing...")

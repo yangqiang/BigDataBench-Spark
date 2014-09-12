@@ -22,14 +22,14 @@ import org.apache.spark.SparkContext
  */
 object PageRank {
   def main(args: Array[String]) {
-    if (args.length < 4) {
-      System.err.println("Usage: PageRank <master> <file> <number_of_iterations> <save_path> [<slices>]")
+    if (args.length < 3) {
+      System.err.println("Usage: PageRank <file> <number_of_iterations> <save_path> [<slices>]")
       System.exit(1)
     }
-    var iters = args(2).toInt
+    var iters = args(1).toInt
     var slices = 1
-    val save_path = args(3)
-    if (args.length > 4) slices = args(4).toInt
+    val save_path = args(2)
+    if (args.length > 3) slices = args(3).toInt
     /*val ctx = new SparkContext(args(0), "PageRank",
       SPARK_HOME, Seq(TARGET_JAR_BIGDATABENCH))*/
 
@@ -37,7 +37,7 @@ object PageRank {
     val ctx = new SparkContext(conf)
 
     // load data
-    val lines = ctx.textFile(args(1), slices)
+    val lines = ctx.textFile(args(0), slices)
 
     // directed edges: (from, (to1, to2, to3))
     val links = lines.map { s =>

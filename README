@@ -1,1 +1,183 @@
 This project contains the Spark workloads in BigDataBench.
+This version is for Spark-1.0.2.
+
+How to use BigDataBench's Spark workloads?
+
+Preparations:
+Make sure Spark-1.0.2 has been successfully installed.
+Configure you bash environment:
+  $SPARK_HOME points to the path where spark installed;
+  Add $SPARK_HOME/bin to the $PATH variable.
+
+The workloads inculde:
+  Sort, Grep, Word Count, NaiveBayesTrainer, BayesClassifier, ConnectedComponent, PageRank, KMeans,
+  and CF(Collaborate Filtering -- ALS)
+
+
+How to run:
+Assume the .jar file locates in $JAR_FILE.
+  Sort
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.Sort $JAR_FILE <data_file> <save_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <save_file>: the HDFS path to save the result
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    ordinary text files
+
+
+  Grep
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.Grep $JAR_FILE <data_file> <keyword> <save_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <keyword>: the keyword to filter the text
+    <save_file>: the HDFS path to save the result
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    ordinary text files
+
+
+  WordCount
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.WordCount $JAR_FILE <data_file> <save_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <save_file>: the HDFS path to save the result
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    ordinary text files
+
+
+  NaiveBayesTrainer
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.NaiveBayesTrainer $JAR_FILE <data_file> <save_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <save_file>: the HDFS path to save the result
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    classname text_content
+
+      for example: (class: dog/cat)
+      dog Dogs are awesome, cats too. I love my dog
+      cat Cats are more preferred by software developers. I never could stand cats. I have a dog
+      dog My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
+      cat Cats are difficult animals, unlike dogs, really annoying, I hate them all
+
+
+  NaiveBayesClassifier
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.NaiveBayesClassifier $JAR_FILE <data_file> <model_file> <save_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <model_file>: the HDFS path of Bayes model data(generated with the training program), for example: /test/bayes_model
+    <save_file>: the HDFS path to save the classification result
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    text_content
+
+      for example:
+      Dogs are awesome, cats too. I love my dog
+      Cats are more preferred by software developers. I never could stand cats. I have a dog
+      My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
+      Cats are difficult animals, unlike dogs, really annoying, I hate them all
+
+    output data format:
+    classname text_content
+
+      for example: (class: dog/cat)
+      dog Dogs are awesome, cats too. I love my dog
+      cat Cats are more preferred by software developers. I never could stand cats. I have a dog
+      dog My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
+      cat Cats are difficult animals, unlike dogs, really annoying, I hate them all
+
+
+  ConnectedComponent
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.ConnectedComponent $JAR_FILE <data_file> [<slices>]
+
+    parameters:
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    [<slices>]: optional, times of number of workers
+
+    input data format:
+    from_vertex to_vertex
+      for example:
+      1 2
+      1 3
+      2 5
+      4 6
+      6 7
+
+
+  PageRank
+    run:
+    spark-submit --class cn.ac.ict.bigdatabench.PageRank $JAR_FILE <file> <number_of_iterations> <save_path> [<slices>]
+
+    parameters:
+      <file>: the HDFS path of input data, for example: /test/data.txt
+      <number_of_iterations>: number of iterations to run the algorithm
+      <save_path>: path to save the result
+      [<slices>]: optional, times of number of workers
+
+    input data format
+      page neighbour_page
+        for example:
+        a b
+        a c
+        b d
+
+
+The following two workloads are included in spark project.
+
+  CF(Collaborate Filtering, ALS)
+    run:
+      spark-submit --class cn.ac.ict.bigdatabench.ALS $JAR_FILE <ratings_file> <rank> <iterations> <output_dir> [<splits>]
+
+    parameters:
+    <ratings_file>: path of input data file
+    <rank>: number of features to train the model
+    <iterations>: number of iterations to run the algorithm
+    <output_dir>: output directory to store the results
+    [<splits>]: optional, level of parallelism to split computation into
+
+    input data:
+      userID,productID,rating
+        for example:
+        1,1,5
+        1,3,4
+        1,5,1
+        2,1,4
+        2,5,5
+
+
+  KMeans
+    run
+    spark-submit --class cn.ac.ict.bigdatabench.KMeans $JAR_FILE <input_file> <k> <max_iterations> [<splits>]
+
+    parameters:
+    <input_file>: the HDFS path of input data, for example: /test/data.txt
+    <k>: number of centers
+    <max_iterations>: number of iterations to run the algorithm
+    [<splits>]: optional, level of parallelism to split computation into
+
+    input data:
+      x11 x12 x13 ... x1n
+      x21 x22 x23 ... x2n
+
+      for example
+      1.0 1.1 1.3 1.4
+      2.1 2.4 2.6 2.7
+      3.1 3.3 3.6 3.7
