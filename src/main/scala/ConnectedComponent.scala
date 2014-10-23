@@ -28,6 +28,7 @@ object ConnectedComponent {
     val graph = GraphLoader.edgeListFile(spark, filename, false, splits)
     val cc = graph.connectedComponents()
 
+    println("OK, there are " + cc.vertices.count() + " components in the graph.")
     System.exit(0)
   }
 
