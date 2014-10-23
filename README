@@ -140,17 +140,14 @@ Assume the .jar file locates in $JAR_FILE.
         b d
 
 
-The following two workloads are included in spark project.
-
   CF(Collaborate Filtering, ALS)
     run:
-      spark-submit --class cn.ac.ict.bigdatabench.ALS $JAR_FILE <ratings_file> <rank> <iterations> <output_dir> [<splits>]
+      spark-submit --class cn.ac.ict.bigdatabench.ALS $JAR_FILE <ratings_file> <rank> <iterations> [<splits>]
 
     parameters:
     <ratings_file>: path of input data file
     <rank>: number of features to train the model
     <iterations>: number of iterations to run the algorithm
-    <output_dir>: output directory to store the results
     [<splits>]: optional, level of parallelism to split computation into
 
     input data:
