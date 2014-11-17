@@ -1,10 +1,10 @@
 This project contains the Spark workloads in BigDataBench.
-This version is for Spark-1.0.2.
+This version is for Spark-1.1.x.
 
 How to use BigDataBench's Spark workloads?
 
 Preparations:
-Make sure Spark-1.0.2 has been successfully installed.
+Make sure Spark-1.1.x has been successfully installed.
 Configure you bash environment:
   $SPARK_HOME points to the path where spark installed;
   Add $SPARK_HOME/bin to the $PATH variable.
