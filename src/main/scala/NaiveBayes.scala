@@ -1,23 +1,21 @@
 /*
- * Naive Bayes workload for BigDataBench
- */
+* Naive Bayes workload for BigDataBench
+*/
 
 package cn.ac.ict.bigdatabench
 
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import scala.collection.mutable.ListBuffer
-import collection.mutable.HashMap
-import org.apache.spark.SparkConf
 
-object NaiveBayesTrainer {
+import collection.mutable.HashMap
+
+import BigDataBenchConf._
+
+object NaiveBayes {
 
   type WCOUNT = HashMap[String, Int]
-  /*
-   * String: name of class
-   * WCOUNT: count for each word
-   * Int: number of class lines
-   */
+  //type CCOUNT = HashMap[String, Int]
   type MODEL = Pair[String, Pair[WCOUNT, Int]]
 
   def train(line: String): MODEL = {
@@ -26,7 +24,6 @@ object NaiveBayesTrainer {
     val tokenizer = line.split(" ")
     val category = tokenizer(0)
 
-    // count word with 1 if it appears in the line
     for (i <- 1 until tokenizer.length) {
       val word = tokenizer(i)
       _wcount.put(word, 1)
@@ -36,26 +33,31 @@ object NaiveBayesTrainer {
   }
 
   def main(args: Array[String]) {
+
     if (args.length < 2) {
-      System.err.println("Usage: NaiveBayes <data_file> " +
+      System.err.println("Usage: NaiveBayes <master> <data_file> " +
         "<save_file> [<slices>]")
       System.exit(1)
     }
 
-    val conf = new SparkConf().setAppName("BigDataBench NaiveBayesTrainer")
-    val spark = new SparkContext(conf)
-    val filename = args(0)
-    val save_path = args(1)
-    val slices = if (args.length > 2) args(2).toInt else 1
+    val host = args(0)
+    val spark = new SparkContext(host, "NaiveBayes",
+      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH), null, null)
+    val filename = args(1)
+    val save_path = args(2)
+    val slices = if (args.length > 3) args(3).toInt else 1
     println("Loading data, please wait...")
     val lines = spark.textFile(filename, slices)
 
     // train every line and return a RDD of classifier
-    val models_rdd = lines.map { line => train(line)}
+    val models_rdd = lines.map { line => train(line) }
 
     // merge all classifier
     println("Reducing...")
+    //val wcount = new WCOUNT
+    //val ccount = new CCOUNT
 
+    // this may need to be replaced with rdd.reduce
     val models_rk = models_rdd.reduceByKey(
       (m1, m2) => {
         val wcount = m1._1
@@ -78,8 +80,7 @@ object NaiveBayesTrainer {
       (model._1, _pos)
     })
 
-    //models_p.saveAsTextFile(save_path + "_readable")
-    models_p.saveAsObjectFile(save_path)
+    models_p.saveAsTextFile(save_path)
     println("Model has been saved to: " + save_path)
 
     System.exit(0)
