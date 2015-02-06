@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+SCALA_VERSION=2.9.3
+
+
+if [ -z "$SPARK_HOME" ]; then
+	echo Please set SPARK_HOME first. >&2
+	exit 1
+fi
+
+# Figure out where the Scala framework is installed
+FWDIR=$SPARK_HOME
+
+# Export this as SPARK_HOME
+# export SPARK_HOME="$FWDIR"
+
+# Load environment variables from conf/spark-env.sh, if it exists
+if [ -e $FWDIR/conf/spark-env.sh ] ; then
+  . $FWDIR/conf/spark-env.sh
+fi
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <class> [<args>]" >&2
+  exit 1
+fi
+
+JAR_DIR=`pwd`/jars
+export TARGET_JAR_BIGDATABENCH=$JAR_DIR/"bigdatabench-spark_2.9.3-0.8.0-incubating.jar"
+TARGET_JAR_SPARK_MLLIB=$JAR_DIR/spark-mllib_2.9.3-0.8.0-incubating.jar
+
+if ! [[ -f $TARGET_JAR_BIGDATABENCH ]]; then
+  echo "Failed to find jar file: $TARGET_JAR_BIGDATABENCH" >&2
+  exit 1
+fi
+if ! [[ -f $TARGET_JAR_SPARK_MLLIB ]]; then
+  echo "Failed to find jar file: $TARGET_JAR_SPARK_MLLIB" >&2
+  exit 1
+fi
+
+export SPARK_EXAMPLES_JAR=$TARGET_JAR_SPARK_MLLIB
+
+# Since the examples JAR ideally shouldn't include spark-core (that dependency should be
+# "provided"), also add our standard Spark classpath, built using compute-classpath.sh.
+CLASSPATH=`$FWDIR/bin/compute-classpath.sh`
+CLASSPATH="$SPARK_EXAMPLES_JAR:$TARGET_JAR_BIGDATABENCH:$CLASSPATH"
+
+# Find java binary
+if [ -n "${JAVA_HOME}" ]; then
+  RUNNER="${JAVA_HOME}/bin/java"
+else
+  if [ `command -v java` ]; then
+    RUNNER="java"
+  else
+    echo "JAVA_HOME is not set" >&2
+    exit 1
+  fi
+fi
+
+if [ "$SPARK_PRINT_LAUNCH_COMMAND" == "1" ]; then
+  echo -n "Spark Command: "
+  echo "$RUNNER" -cp "$CLASSPATH" "$@"
+  echo "========================================"
+  echo
+fi
+
+# echo $CLASSPATH
+exec "$RUNNER" -cp "$CLASSPATH" "$@"
+
