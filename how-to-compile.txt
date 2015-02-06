@@ -1,6 +1,6 @@
 Steps of compiling BigDataBench Spark programs:
 
-1. Make sure Scala has been installed in your environment. The recommened scala version is 2.10.x.
+1. Make sure Scala has been installed in your environment. The recommended scala version is 2.9.3.
  Refer to: http://www.scala-lang.org/download/
 
 2. You need to install the sbt tool first. Refer to: http://www.scala-sbt.org/download.html

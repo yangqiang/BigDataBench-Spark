@@ -19,7 +19,7 @@ object Sort {
     val host = args(0)
     var splits = 1
     val spark = new SparkContext(host, "Sort",
-      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH), null, null)
+      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH))
     val filename = args(1)
     val save_file = args(2)
     if (args.length > 3) splits = args(3).toInt

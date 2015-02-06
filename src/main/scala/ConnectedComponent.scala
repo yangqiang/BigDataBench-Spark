@@ -132,7 +132,7 @@ object ConnectedComponent {
 
     val host = args(0)
     val spark = new SparkContext(host, "ConnectedComponent",
-      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH), null, null)
+      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH))
     val filename = args(1)
     val slices = if (args.length > 2) args(2).toInt else 3
     val lines = spark.textFile(filename, slices)

@@ -19,7 +19,7 @@ object Grep {
     val host = args(0)
     var splits = 1
     val spark = new SparkContext(host, "Grep",
-      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH), null, null)
+      SPARK_HOME, List(TARGET_JAR_BIGDATABENCH))
     val filename = args(1)
     val keyword = args(2)
     val save_file = args(3)

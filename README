@@ -1,23 +1,24 @@
 BigDataBench-Spark is an integrated part of the open source big data benchmark suite project: BigDataBench, publicly available from: http://prof.ict.ac.cn/BigDataBench
 
-This version is for Spark-0.8.0-incubating.
+This version is for Spark-0.9.1.
 
 How to use BigDataBench's Spark workloads?
 
 Compile the source code or download a pre-build package. For compiling, please refer to: how-to-compile.txt
 
 Preparations:
-Make sure Spark-0.8.0-incubating has been successfully installed.
-Configure you bash environment:
-  $SPARK_HOME points to the path where spark installed;
-  Add $SPARK_HOME/bin to the $PATH variable.
+Make sure Spark-0.9.1 has been successfully installed.
+And $SPARK_HOME which points to the path where spark installed is correctly
+configured in your bash environment.
+
 
 The workloads inculde:
-  Sort, Grep, Word Count, BayesClassifier, ConnectedComponent, PageRank
-
+	It contains these workloads: Sort, Grep, Word Count, Naive Bayes(Training),
+	BayesClassifier(Classfication), Connected Component, PageRank, KMeans,
+	and CF(Collaborate Filtering -- ALS)
 
 How to run:
-Sort
+  Sort
     run:
     ./run-bigdatabench cn.ac.ict.bigdatabench.Sort2 <master> <data_file> <save_file> [<slices>]
     
@@ -77,6 +78,36 @@ Sort
       cat Cats are more preferred by software developers. I never could stand cats. I have a dog
       dog My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
       cat Cats are difficult animals, unlike dogs, really annoying, I hate them all
+  
+
+  BayesClassifier(Classification)
+    run:
+    ./run-bigdatabench cn.ac.ict.bigdatabench.BayesClassifier <master> <data_file> <model_file> <save_file> [<slices>]
+      
+    parameters:
+    <master>: URL of Spark server, for example: spark://172.16.1.39:7077
+    <data_file>: the HDFS path of input data, for example: /test/data.txt
+    <model_file>: the HDFS path of Bayes model data(generated with the training program), for example: /test/bayes_model
+    <save_file>: the HDFS path to save the classification result
+    [<slices>]: optional, times of number of workers
+    
+    input data format:
+    text_content
+      
+      for example:
+      Dogs are awesome, cats too. I love my dog
+      Cats are more preferred by software developers. I never could stand cats. I have a dog
+      My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
+      Cats are difficult animals, unlike dogs, really annoying, I hate them all
+    
+    output data format:
+    classname text_content
+      
+      for example: (class: dog/cat)
+      dog Dogs are awesome, cats too. I love my dog
+      cat Cats are more preferred by software developers. I never could stand cats. I have a dog
+      dog My dog's name is Willy. He likes to play with my wife's cat all day long. I love dogs
+      cat Cats are difficult animals, unlike dogs, really annoying, I hate them all
       
 
   ConnectedComponent
@@ -115,3 +146,48 @@ Sort
         a b
         a c
         b d
+
+
+The following two workloads are included in spark project.
+
+  CF(Collaborate Filtering, ALS)
+    run:
+      ./run-bigdatabench org.apache.spark.mllib.recommendation.ALS <master> <ratings_file> <rank> <iterations> <output_dir> [<blocks>]
+    
+    parameters:
+    <master>: URL of Spark server, for example: spark://172.16.1.39:7077
+    <ratings_file>: path of input data file
+    <rank>: number of features to train the model
+    <iterations>: number of iterations to run the algorithm
+    <output_dir>: output directory to store the results
+    [<blocks>]: optional, level of parallelism to split computation into
+    
+    input data:
+      userID,productID,rating
+        for example:
+        1,1,5
+        1,3,4
+        1,5,1
+        2,1,4
+        2,5,5
+
+
+  KMeans
+    run
+    ./run-bigdatabench org.apache.spark.mllib.clustering.KMeans <master> <input_file> <k> <max_iterations> [<runs>]
+    
+    parameters:
+    <master>: URL of Spark server, for example: spark://172.16.1.39:7077
+    <input_file>: the HDFS path of input data, for example: /test/data.txt
+    <k>: number of centers
+    <max_iterations>: number of iterations to run the algorithm
+    [<runs>]: optional, level of parallelism to split computation into
+    
+    input data:
+      x11 x12 x13 ... x1n
+      x21 x22 x23 ... x2n
+      
+      for example
+      1.0 1.1 1.3 1.4
+      2.1 2.4 2.6 2.7
+      3.1 3.3 3.6 3.7
