@@ -1,13 +1,13 @@
 BigDataBench-Spark is an integrated part of the open source big data benchmark suite project: BigDataBench, publicly available from: http://prof.ict.ac.cn/BigDataBench
 
-This version is for Spark-1.1.x.
+This version is for Spark-1.2.x.
 
 How to use BigDataBench's Spark workloads?
 
 Compile the source code or download a pre-build package. For compiling, please refer to: how-to-compile.txt
 
 Preparations:
-Make sure Spark-1.1.x has been successfully installed.
+Make sure Spark-1.2.x has been successfully installed.
 Configure you bash environment:
   $SPARK_HOME points to the path where spark installed;
   Add $SPARK_HOME/bin to the $PATH variable.
