@@ -28,6 +28,7 @@ The workloads inculde:
   and CF(Collaborate Filtering -- ALS)
 
 
+<p>
 How to run:
 Assume the .jar file locates in $JAR_FILE.
   Sort
@@ -192,3 +193,4 @@ Assume the .jar file locates in $JAR_FILE.
       1.0 1.1 1.3 1.4
       2.1 2.4 2.6 2.7
       3.1 3.3 3.6 3.7
+</p>
