@@ -1,6 +1,18 @@
 BigDataBench-Spark is an integrated part of the open source big data benchmark suite project: BigDataBench, publicly available from: http://prof.ict.ac.cn/BigDataBench
 
-This version is for Spark-1.1.x.
+This version is for Spark-1.2.x.
+
+If you need a citation for BigDataBench-Spark, please cite the following
+paper:
+
+[BigDataBench: a Big Data Benchmark Suite from Internet Services.](http://prof.ict.ac.cn/BigDataBench/wp-content/uploads/2013/10/Wang_BigDataBench.pdf)
+
+Lei Wang, Jianfeng Zhan, ChunjieLuo, Yuqing Zhu, Qiang Yang, Yongqiang He,
+WanlingGao, Zhen Jia, Yingjie Shi, Shujie Zhang, Cheng Zhen, Gang Lu, Kent
+Zhan, Xiaona Li, and BizhuQiu. The 20th IEEE International Symposium On High
+Performance Computer Architecture (HPCA-2014), February 15-19, 2014,
+Orlando, Florida, USA.
+
 
 How to use BigDataBench's Spark workloads?
 
