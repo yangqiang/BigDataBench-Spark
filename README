@@ -13,6 +13,8 @@ This version is for Spark-1.0.x.
 
 How to use BigDataBench's Spark workloads?
 
+Compile the source code or download a pre-build package(can be found is the `pre-build' folder). For compiling, please refer to: how-to-compile.txt.
+
 Preparations:
 Make sure Spark-1.0.x has been successfully installed.
 Configure you bash environment:
