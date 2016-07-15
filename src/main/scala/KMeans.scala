@@ -33,7 +33,7 @@ object KMeans {
     println("Start KMeans training...")
     // Load and parse the data
     val data = sc.textFile(filename, splits)
-    val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble)))
+    val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble))).cache()
 
     val clusters = MLLibKMeans.train(parsedData, k, iterations)
     //val clusters = org.apache.spark.mllib.clustering.KMeans.train(parsedData, k, iterations)
